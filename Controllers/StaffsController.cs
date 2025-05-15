@@ -4,50 +4,40 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using CareNet_System.Models;
+using CareNet_System.Repository;
 
 namespace CareNet_System.Controllers
 {
     public class StaffsController : Controller
     {
-        private readonly HosPitalContext _context;
+        private readonly IRepository<Staff> _staffRepository;
 
-        public StaffsController(HosPitalContext context)
+        public StaffsController(IRepository<Staff> staffRepository)
         {
-            _context = context;
+            _staffRepository = staffRepository;
         }
 
         // GET: Staffs
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var hosPitalContext = _context.Staff.Include(s => s.department);
-            return View(await hosPitalContext.ToListAsync());
+            var staffList = _staffRepository.GetAll();
+            return View(staffList);
         }
 
         // GET: Staffs/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var staff = await _context.Staff
-                .Include(s => s.department)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (staff == null)
-            {
-                return NotFound();
-            }
-
+            if (id == null) return NotFound();
+            var staff = _staffRepository.GetAll().FirstOrDefault(s => s.Id == id);
+            if (staff == null) return NotFound();
             return View(staff);
         }
 
         // GET: Staffs/Create
         public IActionResult Create()
         {
-            ViewData["dept_id"] = new SelectList(_context.Departments, "Id", "Id");
+            ViewData["dept_id"] = new SelectList(_staffRepository.GetAll(), "Id", "Id");
 
             ViewBag.TitleList = Enum.GetValues(typeof(StaffTitle))
                 .Cast<StaffTitle>()
@@ -62,34 +52,36 @@ namespace CareNet_System.Controllers
             return View();
         }
 
+
         // POST: Staffs/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,name,title,salary,seniority_level,experience_years,personal_photo,dept_id")] Staff staff)
+
+        public IActionResult Create([Bind("Id,name,title,salary,seniority_level,experience_years,personal_photo,dept_id")] Staff staff)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(staff);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Console.WriteLine(error.ErrorMessage);  // 🔹 طباعة جميع الأخطاء
+                }
+
+                return View(staff);  // 🔹 إعادة عرض الصفحة مع عرض الأخطاء
             }
-            ViewData["dept_id"] = new SelectList(_context.Departments, "Id", "Id", staff.dept_id);
-            return View(staff);
+
+            _staffRepository.Add(staff);
+            _staffRepository.Save();
+            return RedirectToAction("Index");  // 🔹 العودة إلى قائمة الموظفين بعد الإنشاء
         }
-
         // GET: Staffs/Edit/5
-
-
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
-            if (id == null) { return NotFound(); }
+            if (id == null) return NotFound();
+            var staff = _staffRepository.GetAll().FirstOrDefault(s => s.Id == id);
+            if (staff == null) return NotFound();
 
-            var staff = await _context.Staff.FindAsync(id);
-            if (staff == null) { return NotFound(); }
-
-            ViewData["dept_id"] = new SelectList(_context.Departments, "Id", "Id", staff.dept_id);
+            // 🔹 تمرير القوائم إلى ViewBag
+            ViewData["dept_id"] = new SelectList(_staffRepository.GetAll(), "Id", "Id", staff.dept_id);
 
             ViewBag.TitleList = Enum.GetValues(typeof(StaffTitle))
                 .Cast<StaffTitle>()
@@ -105,78 +97,51 @@ namespace CareNet_System.Controllers
         }
 
         // POST: Staffs/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,name,title,salary,seniority_level,experience_years,personal_photo,dept_id")] Staff staff)
+        public IActionResult Edit(int id, [Bind("Id,name,title,salary,seniority_level,experience_years,personal_photo,dept_id")] Staff staff)
         {
-            if (id != staff.Id)
-            {
-                return NotFound();
-            }
+            if (id != staff.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(staff);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!StaffExists(staff.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                _staffRepository.Update(staff);
+                _staffRepository.Save();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["dept_id"] = new SelectList(_context.Departments, "Id", "Id", staff.dept_id);
+
+            // 🔹 إعادة تمرير القوائم إذا فشل التحقق
+            ViewData["dept_id"] = new SelectList(_staffRepository.GetAll(), "Id", "Id", staff.dept_id);
+
+            ViewBag.TitleList = Enum.GetValues(typeof(StaffTitle))
+                .Cast<StaffTitle>()
+                .Select(t => new SelectListItem { Value = t.ToString(), Text = t.ToString() })
+                .ToList();
+
+            ViewBag.LevelList = Enum.GetValues(typeof(Level))
+                .Cast<Level>()
+                .Select(l => new SelectListItem { Value = l.ToString(), Text = l.ToString() })
+                .ToList();
+
             return View(staff);
         }
-
         // GET: Staffs/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var staff = await _context.Staff
-                .Include(s => s.department)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (staff == null)
-            {
-                return NotFound();
-            }
-
+            if (id == null) return NotFound();
+            var staff = _staffRepository.GetAll().FirstOrDefault(s => s.Id == id);
+            if (staff == null) return NotFound();
             return View(staff);
         }
 
         // POST: Staffs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var staff = await _context.Staff.FindAsync(id);
-            if (staff != null)
-            {
-                _context.Staff.Remove(staff);
-            }
-
-            await _context.SaveChangesAsync();
+            _staffRepository.Delete(id);
+            _staffRepository.Save();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool StaffExists(int id)
-        {
-            return _context.Staff.Any(e => e.Id == id);
         }
     }
 }
