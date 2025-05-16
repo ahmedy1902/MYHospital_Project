@@ -19,9 +19,45 @@ namespace CareNet_System.Controllers
         }
 
         // GET: Staffs
-        public IActionResult Index()
+        public IActionResult Index(string titleFilter, int? departmentFilter)
         {
             var staffList = _staffRepository.GetAll();
+
+            // Set selected value for TitleList (so the filter persists)
+            ViewBag.TitleList = new SelectList(
+                Enum.GetValues(typeof(StaffTitle))
+                    .Cast<StaffTitle>()
+                    .Select(t => new { Value = t.ToString(), Text = t.ToString() }),
+                "Value",
+                "Text",
+                titleFilter
+            );
+
+            // Set selected value for DepartmentList
+            var departments = _staffRepository.GetAll()
+                .Select(s => s.department)
+                .Where(d => d != null)
+                .Distinct()
+                .ToList();
+
+            ViewBag.DepartmentList = new SelectList(
+                departments,
+                "Id",
+                "name",
+                departmentFilter
+            );
+
+            // Apply filtering if selected
+            if (!string.IsNullOrEmpty(titleFilter))
+            {
+                staffList = staffList.Where(s => s.title.ToString() == titleFilter).ToList();
+            }
+
+            if (departmentFilter.HasValue)
+            {
+                staffList = staffList.Where(s => s.dept_id == departmentFilter.Value).ToList();
+            }
+
             return View(staffList);
         }
 
