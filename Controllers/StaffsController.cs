@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using CareNet_System.Models;
 using CareNet_System.Repository;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CareNet_System.Controllers
 {
+    [Authorize]
     public class StaffsController : Controller
     {
         private readonly IRepository<Staff> _staffRepository;
@@ -73,7 +75,11 @@ namespace CareNet_System.Controllers
         // GET: Staffs/Create
         public IActionResult Create()
         {
-            ViewData["dept_id"] = new SelectList(_staffRepository.GetAll(), "Id", "Id");
+            ViewBag.dept_id = new SelectList(_staffRepository.GetAll()
+                .Select(s => s.dept_id)
+                .Distinct()
+                .Select(id => new { Value = id, Text = id.ToString() }),
+                "Value", "Text");
 
             ViewBag.TitleList = Enum.GetValues(typeof(StaffTitle))
                 .Cast<StaffTitle>()
@@ -87,7 +93,6 @@ namespace CareNet_System.Controllers
 
             return View();
         }
-
 
         // POST: Staffs/Create
         [HttpPost]
@@ -113,25 +118,16 @@ namespace CareNet_System.Controllers
         public IActionResult Edit(int? id)
         {
             if (id == null) return NotFound();
+
             var staff = _staffRepository.GetAll().FirstOrDefault(s => s.Id == id);
             if (staff == null) return NotFound();
 
-            // 🔹 تمرير القوائم إلى ViewBag
-            ViewData["dept_id"] = new SelectList(_staffRepository.GetAll(), "Id", "Id", staff.dept_id);
-
-            ViewBag.TitleList = Enum.GetValues(typeof(StaffTitle))
-                .Cast<StaffTitle>()
-                .Select(t => new SelectListItem { Value = t.ToString(), Text = t.ToString() })
-                .ToList();
-
-            ViewBag.LevelList = Enum.GetValues(typeof(Level))
-                .Cast<Level>()
-                .Select(l => new SelectListItem { Value = l.ToString(), Text = l.ToString() })
-                .ToList();
+            ViewBag.dept_id = new SelectList(_staffRepository.GetAll()
+                .Select(s => new { Value = s.dept_id, Text = s.dept_id.ToString() })
+                .Distinct(), "Value", "Text", staff.dept_id);
 
             return View(staff);
         }
-
         // POST: Staffs/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
