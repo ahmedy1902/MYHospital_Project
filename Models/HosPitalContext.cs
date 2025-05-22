@@ -15,5 +15,10 @@ namespace CareNet_System.Models
         public DbSet<Department> Departments { get; set; }
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Bills> Bills { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=Hospital;Integrated Security=True;Encrypt=False");
+        }
     }
 }

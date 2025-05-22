@@ -16,23 +16,23 @@ namespace CareNet_System
             // Add services to the container
             builder.Services.AddControllersWithViews();
 
-            // Register custom authorization filter (if needed)
+            // ✅ Register custom authorization filter (if needed)
             builder.Services.AddScoped<AuthorizeFilter>();
 
             // ✅ Configure cookie authentication to use custom login page
             builder.Services.ConfigureApplicationCookie(options =>
             {
-                options.LoginPath = "/Account/Login";             // ✅ use your custom login URL
+                options.LoginPath = "/Account/Login"; // ✅ Custom login URL
                 options.AccessDeniedPath = "/Account/AccessDenied";
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
                 options.SlidingExpiration = true;
             });
 
-            // Configure database context
+            // ✅ Configure database context
             builder.Services.AddDbContext<HosPitalContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("cs")));
 
-            // Configure ASP.NET Identity (customized)
+            // ✅ Configure ASP.NET Identity (customized)
             builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
@@ -45,12 +45,13 @@ namespace CareNet_System
             .AddEntityFrameworkStores<HosPitalContext>()
             .AddDefaultTokenProviders();
 
-            // Register repositories
+            // ✅ Register repositories
             builder.Services.AddScoped<IRepository<Staff>, StaffRepository>();
+            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>(); // ✅ الاحتفاظ بمستودع الأقسام أيضًا
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline
+            // ✅ Configure the HTTP request pipeline
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
@@ -66,7 +67,7 @@ namespace CareNet_System
             app.UseAuthentication();
             app.UseAuthorization();
 
-            // Configure routing
+            // ✅ Configure routing
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
