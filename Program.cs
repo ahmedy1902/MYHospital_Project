@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using CareNet_System.Models;
+using CareNet_System.Repostatory;
 
 namespace CareNet_System
 {
@@ -12,7 +13,10 @@ namespace CareNet_System
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+           
+
             builder.Services.AddDbContext<HosPitalContext>(options => { options.UseSqlServer(builder.Configuration.GetConnectionString("cs")); });
+            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 
             var app = builder.Build();
 

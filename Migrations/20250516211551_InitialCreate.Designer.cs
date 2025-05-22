@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CareNet_System.Migrations
 {
     [DbContext(typeof(HosPitalContext))]
-    [Migration("20250514210639_AhmedMig")]
-    partial class AhmedMig
+    [Migration("20250516211551_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

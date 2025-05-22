@@ -5,7 +5,7 @@
 namespace CareNet_System.Migrations
 {
     /// <inheritdoc />
-    public partial class AhmedMig : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,7 +48,7 @@ namespace CareNet_System.Migrations
                         column: x => x.dept_id,
                         principalTable: "Departments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -71,13 +71,13 @@ namespace CareNet_System.Migrations
                         column: x => x.dept_id,
                         principalTable: "Departments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Patients_Staff_followUp_doctorID",
                         column: x => x.followUp_doctorID,
                         principalTable: "Staff",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -99,7 +99,7 @@ namespace CareNet_System.Migrations
                         column: x => x.patient_id,
                         principalTable: "Patients",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

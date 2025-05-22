@@ -8,5 +8,6 @@ namespace CareNet_System.Repository
         void Save();
         void Delete(int id);
         void Update(T obj);
+        T GetById(int id);
     }
 }
