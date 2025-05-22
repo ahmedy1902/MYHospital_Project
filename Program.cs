@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using CareNet_System.Models;
 using CareNet_System.Repository;
-using CareNet_System.Repostatory;
 
 var builder = WebApplication.CreateBuilder(args);
 
