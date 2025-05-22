@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using CareNet_System.Models;
@@ -14,18 +13,18 @@ namespace CareNet_System.Controllers
     public class StaffsController : Controller
     {
         private readonly IRepository<Staff> _staffRepository;
+        private readonly IDepartmentRepository _departmentRepository;
 
-        public StaffsController(IRepository<Staff> staffRepository)
+        public StaffsController(IRepository<Staff> staffRepository, IDepartmentRepository departmentRepository)
         {
             _staffRepository = staffRepository;
+            _departmentRepository = departmentRepository;
         }
 
-        // GET: Staffs
         public IActionResult Index(string titleFilter, int? departmentFilter)
         {
             var staffList = _staffRepository.GetAll();
 
-            // Set selected value for TitleList (so the filter persists)
             ViewBag.TitleList = new SelectList(
                 Enum.GetValues(typeof(StaffTitle))
                     .Cast<StaffTitle>()
@@ -35,21 +34,13 @@ namespace CareNet_System.Controllers
                 titleFilter
             );
 
-            // Set selected value for DepartmentList
-            var departments = _staffRepository.GetAll()
-                .Select(s => s.department)
-                .Where(d => d != null)
-                .Distinct()
-                .ToList();
-
             ViewBag.DepartmentList = new SelectList(
-                departments,
+                _departmentRepository.GetAll(),
                 "Id",
                 "name",
                 departmentFilter
             );
 
-            // Apply filtering if selected
             if (!string.IsNullOrEmpty(titleFilter))
             {
                 staffList = staffList.Where(s => s.title.ToString() == titleFilter).ToList();
@@ -63,23 +54,21 @@ namespace CareNet_System.Controllers
             return View(staffList);
         }
 
-        // GET: Staffs/Details/5
         public IActionResult Details(int? id)
         {
             if (id == null) return NotFound();
+
             var staff = _staffRepository.GetAll().FirstOrDefault(s => s.Id == id);
             if (staff == null) return NotFound();
+
+            staff.department = _departmentRepository.GetById(staff.dept_id);
+
             return View(staff);
         }
 
-        // GET: Staffs/Create
         public IActionResult Create()
         {
-            ViewBag.dept_id = new SelectList(_staffRepository.GetAll()
-                .Select(s => s.dept_id)
-                .Distinct()
-                .Select(id => new { Value = id, Text = id.ToString() }),
-                "Value", "Text");
+            ViewBag.dept_id = new SelectList(_departmentRepository.GetAll(), "Id", "name");
 
             ViewBag.TitleList = Enum.GetValues(typeof(StaffTitle))
                 .Cast<StaffTitle>()
@@ -94,27 +83,20 @@ namespace CareNet_System.Controllers
             return View();
         }
 
-        // POST: Staffs/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-
         public IActionResult Create([Bind("Id,name,title,salary,seniority_level,experience_years,personal_photo,dept_id")] Staff staff)
         {
             if (!ModelState.IsValid)
             {
-                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-                {
-                    Console.WriteLine(error.ErrorMessage);  // 🔹 طباعة جميع الأخطاء
-                }
-
-                return View(staff);  // 🔹 إعادة عرض الصفحة مع عرض الأخطاء
+                return View(staff);
             }
 
             _staffRepository.Add(staff);
             _staffRepository.Save();
-            return RedirectToAction("Index");  // 🔹 العودة إلى قائمة الموظفين بعد الإنشاء
+            return RedirectToAction("Index");
         }
-        // GET: Staffs/Edit/5
+
         public IActionResult Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -122,13 +104,21 @@ namespace CareNet_System.Controllers
             var staff = _staffRepository.GetAll().FirstOrDefault(s => s.Id == id);
             if (staff == null) return NotFound();
 
-            ViewBag.dept_id = new SelectList(_staffRepository.GetAll()
-                .Select(s => new { Value = s.dept_id, Text = s.dept_id.ToString() })
-                .Distinct(), "Value", "Text", staff.dept_id);
+            ViewBag.TitleList = Enum.GetValues(typeof(StaffTitle))
+                .Cast<StaffTitle>()
+                .Select(t => new SelectListItem { Value = t.ToString(), Text = t.ToString() })
+                .ToList();
+
+            ViewBag.LevelList = Enum.GetValues(typeof(Level))
+                .Cast<Level>()
+                .Select(l => new SelectListItem { Value = l.ToString(), Text = l.ToString() })
+                .ToList();
+
+            ViewBag.dept_id = new SelectList(_departmentRepository.GetAll(), "Id", "name", staff.dept_id);
 
             return View(staff);
         }
-        // POST: Staffs/Edit/5
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, [Bind("Id,name,title,salary,seniority_level,experience_years,personal_photo,dept_id")] Staff staff)
@@ -142,9 +132,6 @@ namespace CareNet_System.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // 🔹 إعادة تمرير القوائم إذا فشل التحقق
-            ViewData["dept_id"] = new SelectList(_staffRepository.GetAll(), "Id", "Id", staff.dept_id);
-
             ViewBag.TitleList = Enum.GetValues(typeof(StaffTitle))
                 .Cast<StaffTitle>()
                 .Select(t => new SelectListItem { Value = t.ToString(), Text = t.ToString() })
@@ -155,18 +142,23 @@ namespace CareNet_System.Controllers
                 .Select(l => new SelectListItem { Value = l.ToString(), Text = l.ToString() })
                 .ToList();
 
-            return View(staff);
-        }
-        // GET: Staffs/Delete/5
-        public IActionResult Delete(int? id)
-        {
-            if (id == null) return NotFound();
-            var staff = _staffRepository.GetAll().FirstOrDefault(s => s.Id == id);
-            if (staff == null) return NotFound();
+            ViewBag.dept_id = new SelectList(_departmentRepository.GetAll(), "Id", "name", staff.dept_id);
+
             return View(staff);
         }
 
-        // POST: Staffs/Delete/5
+        public IActionResult Delete(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var staff = _staffRepository.GetAll().FirstOrDefault(s => s.Id == id);
+            if (staff == null) return NotFound();
+
+            staff.department = _departmentRepository.GetById(staff.dept_id); 
+
+            return View(staff);
+        }
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)

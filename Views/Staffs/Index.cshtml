@@ -5,7 +5,8 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>ِAll Stuff members</h1>
+<h1>All Staff Members</h1>
+
 <form method="get" asp-action="Index" class="mb-3">
     <div class="row">
         <div class="col-md-4">
@@ -28,72 +29,43 @@
         </div>
     </div>
 </form>
+
 <p>
     <a asp-action="Create" class="btn btn-primary">Create New</a>
 </p>
+
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>          
-            <th>
-                @Html.DisplayNameFor(model => model.name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.salary)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.seniority_level)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.experience_years)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.personal_photo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.department)
-            </th>
-            <th></th>
+            <th>@Html.DisplayNameFor(model => model.Id)</th>
+            <th>@Html.DisplayNameFor(model => model.name)</th>
+            <th>@Html.DisplayNameFor(model => model.title)</th>
+            <th>@Html.DisplayNameFor(model => model.salary)</th>
+            <th>@Html.DisplayNameFor(model => model.seniority_level)</th>
+            <th>@Html.DisplayNameFor(model => model.experience_years)</th>
+            <th>@Html.DisplayNameFor(model => model.personal_photo)</th>
+            <th>@Html.DisplayNameFor(model => model.department.name)</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>         
-            <td>
-                @Html.DisplayFor(modelItem => item.name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.salary)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.seniority_level)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.experience_years)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.personal_photo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.department.Id)
-            </td>
-            <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class=" btn btn-primary">Edit</a> |
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                <td>@Html.DisplayFor(modelItem => item.name)</td>
+                <td>@Html.DisplayFor(modelItem => item.title)</td>
+                <td>@Html.DisplayFor(modelItem => item.salary)</td>
+                <td>@Html.DisplayFor(modelItem => item.seniority_level)</td>
+                <td>@Html.DisplayFor(modelItem => item.experience_years)</td>
+                <td>@Html.DisplayFor(modelItem => item.personal_photo)</td>
+                <td>@Html.DisplayFor(modelItem => item.department.name)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
-            </td>
-        </tr>
-}
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
