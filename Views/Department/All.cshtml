@@ -4,7 +4,7 @@
 
 @{
     <h1 style="color:blue"> Departments of CareNet Hospital  </h1>
-    <a href="/Department/NewDept"> Add new Department</a>
+    <a asp-controller="Department" asp-action="NewDept">Add new Department</a>
     
     <table class="table table-bordered table-hover">
         <tr>
@@ -23,8 +23,16 @@
                 <td> @item.manager</td>
                 <td>@item.Patients_num</td>
                 <td>@item.employees_num</td>
-                <td><a href="/Department/Edit/@item.Id"> Edit</a> </td>
-                <td><a href="/Department/Delete/@item.Id" onclick="return confirm('Are you sure you want to permenantly delete @item.name department ?')" style="color:red"> Remove</a> </td>
+                <td>  <a asp-controller="Department" asp-action="Edit" asp-route-id="@item.Id">Edit</a> </td>
+                <td>
+                    <a asp-controller="Department"
+                       asp-action="Delete"
+                       asp-route-id="@item.Id"
+                       onclick="return confirm('Are you sure you want to permanently delete @item.name department ?')"
+                       style="color:red">
+                        Remove
+                    </a>
+                </td>
 
             </tr>
 
