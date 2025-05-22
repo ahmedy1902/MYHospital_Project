@@ -20,7 +20,9 @@
 
             <div class="form-group">
                 <label asp-for="manager" class="control-label"></label>
-                <input asp-for="manager" class="form-control" />
+                <select asp-for="manager" class="form-control" asp-items="ViewBag.ManagerList">
+                    <option value="">-- Select Manager --</option> 
+                </select>
                 <span asp-validation-for="manager" class="text-danger"></span>
             </div>
 
@@ -38,11 +40,10 @@
 
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-success" />
+                <a asp-action="Index" class="btn btn-warning">Back to List</a>
+
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
