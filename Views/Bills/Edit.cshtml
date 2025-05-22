@@ -1,4 +1,5 @@
 ﻿@model CareNet_System.Models.Bills
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
     ViewData["Title"] = "Edit";
@@ -13,37 +14,41 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+
             <div class="form-group">
                 <label asp-for="total_amount" class="control-label"></label>
                 <input asp-for="total_amount" class="form-control" />
                 <span asp-validation-for="total_amount" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Payment_Method" class="control-label"></label>
-                <select asp-for="Payment_Method" class="form-control"></select>
+                <select asp-for="Payment_Method" class="form-control" asp-items="@( (IEnumerable<SelectListItem>)ViewData["Payment_Method"] )"></select>
                 <span asp-validation-for="Payment_Method" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="insurance_id" class="control-label"></label>
                 <input asp-for="insurance_id" class="form-control" />
                 <span asp-validation-for="insurance_id" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="patient_id" class="control-label"></label>
-                <select asp-for="patient_id" class="form-control" asp-items="ViewBag.patient_id"></select>
+                <select asp-for="patient_id" class="form-control" asp-items="@( (IEnumerable<SelectListItem>)ViewData["patient_id"] )"></select>
                 <span asp-validation-for="patient_id" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-warning">Back to List</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

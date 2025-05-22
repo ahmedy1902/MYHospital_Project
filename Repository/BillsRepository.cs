@@ -16,20 +16,25 @@ namespace CareNet_System.Repository
 
         public List<Bills> GetAll()
         {
-            return _context.Bills.Include(b => b.patient)
+            return _context.Bills
+                .Include(b => b.patient)
+                    .ThenInclude(p => p.followUpDoctor)
                 .Select(b => new Bills
                 {
                     Id = b.Id,
                     total_amount = b.total_amount,
                     Payment_Method = b.Payment_Method,
-                    insurance_id = b.insurance_id ?? 0, // ✅ التعامل مع NULL
-                    patient_id = b.patient_id ?? 0, // ✅ التعامل مع NULL
-                    patient = b.patient ?? new Patient() // ✅ تجنب NULL
+                    insurance_id = b.insurance_id ?? 0,
+                    patient_id = b.patient_id ?? 0,
+                    patient = b.patient ?? new Patient()
                 }).ToList();
         }
+
         public Bills GetById(int id)
         {
-            return _context.Bills.Include(b => b.patient)
+            return _context.Bills
+                .Include(b => b.patient)
+                    .ThenInclude(p => p.followUpDoctor)
                 .FirstOrDefault(b => b.Id == id);
         }
 

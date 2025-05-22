@@ -20,11 +20,33 @@ namespace CareNet_System.Controllers
         }
 
         // GET: Bills
-        public IActionResult Index()
+        public IActionResult Index(string paymentFilter, int? patientFilter)
         {
             var billsList = _billsRepo.GetAll();
+
+            if (!string.IsNullOrEmpty(paymentFilter) &&
+                Enum.TryParse<billMethod>(paymentFilter, out var method))
+            {
+                billsList = billsList.Where(b => b.Payment_Method == method).ToList();
+            }
+
+            if (patientFilter.HasValue)
+            {
+                billsList = billsList.Where(b => b.patient_id == patientFilter.Value).ToList();
+            }
+
+            ViewBag.PaymentMethods = new SelectList(
+                Enum.GetValues(typeof(billMethod)).Cast<billMethod>(), paymentFilter);
+
+            ViewBag.PatientList = new SelectList(
+                _patientRepo.GetAll(), "Id", "name", patientFilter);
+
+            ViewBag.SelectedPayment = paymentFilter;
+            ViewBag.SelectedPatient = patientFilter;
+
             return View(billsList);
         }
+
 
         // GET: Bills/Details/5
         public IActionResult Details(int id)
@@ -37,7 +59,26 @@ namespace CareNet_System.Controllers
         // GET: Bills/Create
         public IActionResult Create()
         {
-            ViewData["patient_id"] = new SelectList(_patientRepo.GetAll(), "Id", "name");
+            ViewBag.PaymentMethods = new SelectList(
+                Enum.GetValues(typeof(billMethod))
+                    .Cast<billMethod>()
+                    .Select(m => new {
+                        Value = m.ToString(),
+                        Text = m.ToString()
+                    }),
+                "Value",
+                "Text"
+            );
+
+            ViewBag.PatientList = new SelectList(
+                _patientRepo.GetAll().Select(p => new {
+                    p.Id,
+                    FullName = $"{p.name} (ID: {p.Id})"
+                }),
+                "Id",
+                "FullName"
+            );
+
             return View();
         }
 
@@ -48,7 +89,28 @@ namespace CareNet_System.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewData["patient_id"] = new SelectList(_patientRepo.GetAll(), "Id", "name", bill.patient_id);
+                ViewBag.PaymentMethods = new SelectList(
+                    Enum.GetValues(typeof(billMethod))
+                        .Cast<billMethod>()
+                        .Select(m => new {
+                            Value = m.ToString(),
+                            Text = m.ToString()
+                        }),
+                    "Value",
+                    "Text",
+                    bill.Payment_Method.ToString()
+                );
+
+                ViewBag.PatientList = new SelectList(
+                    _patientRepo.GetAll().Select(p => new {
+                        p.Id,
+                        FullName = $"{p.name} (ID: {p.Id})"
+                    }),
+                    "Id",
+                    "FullName",
+                    bill.patient_id
+                );
+
                 return View(bill);
             }
 
@@ -56,13 +118,29 @@ namespace CareNet_System.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+
         // GET: Bills/Edit/5
         public IActionResult Edit(int id)
         {
             var bill = _billsRepo.GetById(id);
             if (bill == null) return NotFound();
 
+            // قائمة المرضى
             ViewData["patient_id"] = new SelectList(_patientRepo.GetAll(), "Id", "name", bill.patient_id);
+
+            // تحويل enum billMethod إلى قائمة SelectListItems
+            var paymentMethods = Enum.GetValues(typeof(billMethod))
+                                     .Cast<billMethod>()
+                                     .Select(pm => new SelectListItem
+                                     {
+                                         Text = pm.ToString(),
+                                         Value = pm.ToString(),
+                                         Selected = (pm == bill.Payment_Method)
+                                     }).ToList();
+
+            ViewData["Payment_Method"] = paymentMethods;
+
             return View(bill);
         }
 
@@ -72,11 +150,29 @@ namespace CareNet_System.Controllers
         public IActionResult Edit(int id, Bills bill)
         {
             if (id != bill.Id) return NotFound();
-            if (!ModelState.IsValid) return View(bill);
+
+            if (!ModelState.IsValid)
+            {
+                ViewData["patient_id"] = new SelectList(_patientRepo.GetAll(), "Id", "name", bill.patient_id);
+
+                var paymentMethods = Enum.GetValues(typeof(billMethod))
+                                         .Cast<billMethod>()
+                                         .Select(pm => new SelectListItem
+                                         {
+                                             Text = pm.ToString(),
+                                             Value = pm.ToString(),
+                                             Selected = (pm == bill.Payment_Method)
+                                         }).ToList();
+
+                ViewData["Payment_Method"] = paymentMethods;
+
+                return View(bill);
+            }
 
             _billsRepo.Update(bill);
             return RedirectToAction(nameof(Index));
         }
+
 
         // GET: Bills/Delete/5
         public IActionResult Delete(int id)
