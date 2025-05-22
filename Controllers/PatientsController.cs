@@ -2,10 +2,13 @@
 using CareNet_System.Models;
 using CareNet_System.Repository;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using CareNet_System.Repostatory;
+using CareNet_System.Repository;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CareNet_System.Controllers
 {
+    [Authorize]
+
     public class PatientsController : Controller
     {
         private readonly IPatientRepository _patientRepo;

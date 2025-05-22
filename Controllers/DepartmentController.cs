@@ -1,4 +1,4 @@
-﻿using CareNet_System.Repostatory;
+﻿using CareNet_System.Repository;
 using Microsoft.AspNetCore.Mvc;
 using CareNet_System.Models;
 

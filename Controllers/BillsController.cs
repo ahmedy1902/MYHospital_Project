@@ -2,9 +2,12 @@
 using CareNet_System.Models;
 using CareNet_System.Repository;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CareNet_System.Controllers
 {
+    [Authorize]
+
     public class BillsController : Controller
     {
         private readonly IBillsRepository _billsRepo;

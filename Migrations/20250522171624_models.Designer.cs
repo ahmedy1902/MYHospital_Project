@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CareNet_System.Migrations
 {
     [DbContext(typeof(HosPitalContext))]
-    [Migration("20250521235856_auth")]
-    partial class auth
+    [Migration("20250522171624_models")]
+    partial class models
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,10 +37,10 @@ namespace CareNet_System.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("insurance_id")
+                    b.Property<int?>("insurance_id")
                         .HasColumnType("int");
 
-                    b.Property<int>("patient_id")
+                    b.Property<int?>("patient_id")
                         .HasColumnType("int");
 
                     b.Property<double>("total_amount")
@@ -68,11 +68,13 @@ namespace CareNet_System.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("manager")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 
@@ -299,12 +301,10 @@ namespace CareNet_System.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -341,12 +341,10 @@ namespace CareNet_System.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -360,9 +358,7 @@ namespace CareNet_System.Migrations
                 {
                     b.HasOne("CareNet_System.Models.Patient", "patient")
                         .WithMany("bills")
-                        .HasForeignKey("patient_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("patient_id");
 
                     b.Navigation("patient");
                 });

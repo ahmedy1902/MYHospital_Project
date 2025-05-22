@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CareNet_System.Migrations
 {
     /// <inheritdoc />
-    public partial class auth : Migration
+    public partial class models : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -56,8 +56,8 @@ namespace CareNet_System.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    manager = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    manager = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Patients_num = table.Column<int>(type: "int", nullable: false),
                     employees_num = table.Column<int>(type: "int", nullable: false)
                 },
@@ -112,8 +112,8 @@ namespace CareNet_System.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
@@ -157,8 +157,8 @@ namespace CareNet_System.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -234,8 +234,8 @@ namespace CareNet_System.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     total_amount = table.Column<double>(type: "float", nullable: false),
                     Payment_Method = table.Column<string>(type: "nvarchar(50)", nullable: false),
-                    insurance_id = table.Column<int>(type: "int", nullable: false),
-                    patient_id = table.Column<int>(type: "int", nullable: false)
+                    insurance_id = table.Column<int>(type: "int", nullable: true),
+                    patient_id = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -244,8 +244,7 @@ namespace CareNet_System.Migrations
                         name: "FK_Bills_Patients_patient_id",
                         column: x => x.patient_id,
                         principalTable: "Patients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(

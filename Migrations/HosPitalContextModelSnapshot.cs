@@ -34,10 +34,10 @@ namespace CareNet_System.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("insurance_id")
+                    b.Property<int?>("insurance_id")
                         .HasColumnType("int");
 
-                    b.Property<int>("patient_id")
+                    b.Property<int?>("patient_id")
                         .HasColumnType("int");
 
                     b.Property<double>("total_amount")
@@ -65,11 +65,13 @@ namespace CareNet_System.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("manager")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 
@@ -353,9 +355,7 @@ namespace CareNet_System.Migrations
                 {
                     b.HasOne("CareNet_System.Models.Patient", "patient")
                         .WithMany("bills")
-                        .HasForeignKey("patient_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("patient_id");
 
                     b.Navigation("patient");
                 });

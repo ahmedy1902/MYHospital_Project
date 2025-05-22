@@ -1,6 +1,7 @@
 ﻿using CareNet_System.Models;
 using CareNet_System.Repository;
 using Microsoft.EntityFrameworkCore;
+
 public class StaffRepository : IRepository<Staff>
 {
     private readonly HosPitalContext _context;
@@ -12,17 +13,24 @@ public class StaffRepository : IRepository<Staff>
 
     public List<Staff> GetAll()
     {
-        return _context.Staff.Include(s => s.department).ToList();
+        return _context.Staff.ToList();
     }
 
-    public void Add(Staff obj)
+    public Staff GetById(int id)
     {
-        _context.Staff.Add(obj);
+        return _context.Staff.FirstOrDefault(s => s.Id == id);
     }
 
-    public void Update(Staff obj)
+    public void Add(Staff entity)
     {
-        _context.Staff.Update(obj);
+        _context.Staff.Add(entity);
+        Save();
+    }
+
+    public void Update(Staff entity)
+    {
+        _context.Staff.Update(entity);
+        Save();
     }
 
     public void Delete(int id)
@@ -31,6 +39,7 @@ public class StaffRepository : IRepository<Staff>
         if (staff != null)
         {
             _context.Staff.Remove(staff);
+            Save();
         }
     }
 
