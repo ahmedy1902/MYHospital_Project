@@ -2,63 +2,118 @@
 @attribute [Authorize]
 
 @{
-    ViewData["Title"] = "Patients";
+    ViewData["Title"] = "Patient List";
+
+    var roomList = ViewBag.RoomList as List<SelectListItem>;
+    var doctorList = ViewBag.DoctorList as List<SelectListItem>;
+    var treatmentList = ViewBag.TreatmentList as List<SelectListItem>;
+
+    string selectedRoom = ViewBag.SelectedRoom as string;
+    string selectedDoctor = ViewBag.SelectedDoctor as string;
+    string selectedTreatment = ViewBag.SelectedTreatment as string;
 }
 
 <h1>All Patients</h1>
 
-<form method="get" asp-action="Index" class="mb-3">
+<form asp-action="Index" method="get">
     <div class="row">
-        <div class="col-md-4">
-            <label for="departmentFilter">Filter by Department</label>
-            <select name="departmentFilter" class="form-control" asp-items="ViewBag.DepartmentList">
-                <option value="">-- Select Department --</option>
+        <div class="col-md-3">
+            <label>Room Number</label>
+            <select name="roomFilter" class="form-control">
+                <option value="">-- Select Room --</option>
+                @if (roomList != null)
+                {
+                    foreach (var item in roomList)
+                    {
+                        if (item.Value == selectedRoom)
+                        {
+                            <option value="@item.Value" selected>@item.Text</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    }
+                }
             </select>
         </div>
 
-        <div class="col-md-4">
-            <label for="doctorFilter">Filter by Doctor</label>
-            <select name="doctorFilter" class="form-control" asp-items="ViewBag.StaffList">
+        <div class="col-md-3">
+            <label>Follow-up Doctor</label>
+            <select name="doctorFilter" class="form-control">
                 <option value="">-- Select Doctor --</option>
+                @if (doctorList != null)
+                {
+                    foreach (var item in doctorList)
+                    {
+                        if (item.Value == selectedDoctor)
+                        {
+                            <option value="@item.Value" selected>@item.Text</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    }
+                }
             </select>
         </div>
 
-        <div class="col-md-4 mt-4">
+        <div class="col-md-3">
+            <label>Treatment Type</label>
+            <select name="treatmentFilter" class="form-control">
+                <option value="">-- Select Treatment --</option>
+                @if (treatmentList != null)
+                {
+                    foreach (var item in treatmentList)
+                    {
+                        if (item.Value == selectedTreatment)
+                        {
+                            <option value="@item.Value" selected>@item.Text</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="col-md-3 d-flex align-items-end">
             <button type="submit" class="btn btn-primary">Filter</button>
-            <a asp-action="Index" class="btn btn-secondary">Reset</a>
+            <a asp-action="Index" class="btn btn-secondary ms-2">Clear Filters</a>
         </div>
     </div>
 </form>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Add New Patient</a>
+    <a asp-action="Create" class="btn btn-primary">Create New Patient</a>
 </p>
 
 <table class="table">
     <thead>
         <tr>
-            <th>@Html.DisplayNameFor(model => model.Id)</th>
             <th>@Html.DisplayNameFor(model => model.name)</th>
             <th>@Html.DisplayNameFor(model => model.room_num)</th>
             <th>@Html.DisplayNameFor(model => model.treatment)</th>
-            <th>@Html.DisplayNameFor(model => model.department.name)</th>
-            <th>@Html.DisplayNameFor(model => model.staff.name)</th>
-            <th></th>
+            <th>@Html.DisplayNameFor(model => model.department)</th>
+            <th>@Html.DisplayNameFor(model => model.followUpDoctor)</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
-                <td>@Html.DisplayFor(modelItem => item.Id)</td>
                 <td>@Html.DisplayFor(modelItem => item.name)</td>
                 <td>@Html.DisplayFor(modelItem => item.room_num)</td>
                 <td>@Html.DisplayFor(modelItem => item.treatment)</td>
                 <td>@Html.DisplayFor(modelItem => item.department.name)</td>
-                <td>@Html.DisplayFor(modelItem => item.staff.name)</td>
+                <td>@Html.DisplayFor(modelItem => item.followUpDoctor.name)</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-success">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
                 </td>
             </tr>

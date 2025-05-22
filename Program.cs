@@ -13,10 +13,22 @@ builder.Services.AddDbContext<HosPitalContext>(options =>
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<HosPitalContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 6;
+});
+
 builder.Services.AddScoped<IRepository<Staff>, StaffRepository>();
+builder.Services.AddScoped<IStaffRepository, StaffRepository>(); 
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IBillsRepository, BillsRepository>();
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())

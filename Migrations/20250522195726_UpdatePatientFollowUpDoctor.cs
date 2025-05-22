@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CareNet_System.Migrations
 {
     /// <inheritdoc />
-    public partial class models : Migration
+    public partial class UpdatePatientFollowUpDoctor : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

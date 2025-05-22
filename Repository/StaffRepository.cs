@@ -1,8 +1,11 @@
 ﻿using CareNet_System.Models;
 using CareNet_System.Repository;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-public class StaffRepository : IRepository<Staff>
+public class StaffRepository : IStaffRepository
 {
     private readonly HosPitalContext _context;
 
@@ -46,5 +49,10 @@ public class StaffRepository : IRepository<Staff>
     public void Save()
     {
         _context.SaveChanges();
+    }
+
+    public async Task<List<Staff>> GetStaffByTitleAsync(StaffTitle title)
+    {
+        return await _context.Staff.Where(s => s.title == title).ToListAsync();
     }
 }

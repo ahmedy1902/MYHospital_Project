@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CareNet_System.Migrations
 {
     [DbContext(typeof(HosPitalContext))]
-    [Migration("20250522171624_models")]
-    partial class models
+    [Migration("20250522195830_IgnoreChanges")]
+    partial class IgnoreChanges
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -371,7 +371,7 @@ namespace CareNet_System.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CareNet_System.Models.Staff", "staff")
+                    b.HasOne("CareNet_System.Models.Staff", "followUpDoctor")
                         .WithOne("patients")
                         .HasForeignKey("CareNet_System.Models.Patient", "followUp_doctorID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -379,7 +379,7 @@ namespace CareNet_System.Migrations
 
                     b.Navigation("department");
 
-                    b.Navigation("staff");
+                    b.Navigation("followUpDoctor");
                 });
 
             modelBuilder.Entity("CareNet_System.Models.Staff", b =>

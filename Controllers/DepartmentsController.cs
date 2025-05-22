@@ -25,7 +25,8 @@ namespace CareNet_System.Controllers
             var departments = _deptRepo.GetAll();
 
             ViewBag.ManagerList = new SelectList(
-                departments.Select(d => d.manager).Distinct().ToList()
+                departments.Select(d => d.manager).Distinct().ToList(),
+                selectedValue: managerFilter 
             );
 
             if (!string.IsNullOrEmpty(managerFilter))
@@ -35,6 +36,7 @@ namespace CareNet_System.Controllers
 
             return View(departments);
         }
+
         public IActionResult Details(int id)
         {
             var department = _deptRepo.GetById(id);
