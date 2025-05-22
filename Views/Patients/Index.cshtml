@@ -1,0 +1,67 @@
+﻿@model IEnumerable<CareNet_System.Models.Patient>
+@attribute [Authorize]
+
+@{
+    ViewData["Title"] = "Patients";
+}
+
+<h1>All Patients</h1>
+
+<form method="get" asp-action="Index" class="mb-3">
+    <div class="row">
+        <div class="col-md-4">
+            <label for="departmentFilter">Filter by Department</label>
+            <select name="departmentFilter" class="form-control" asp-items="ViewBag.DepartmentList">
+                <option value="">-- Select Department --</option>
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label for="doctorFilter">Filter by Doctor</label>
+            <select name="doctorFilter" class="form-control" asp-items="ViewBag.StaffList">
+                <option value="">-- Select Doctor --</option>
+            </select>
+        </div>
+
+        <div class="col-md-4 mt-4">
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a asp-action="Index" class="btn btn-secondary">Reset</a>
+        </div>
+    </div>
+</form>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Add New Patient</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Id)</th>
+            <th>@Html.DisplayNameFor(model => model.name)</th>
+            <th>@Html.DisplayNameFor(model => model.room_num)</th>
+            <th>@Html.DisplayNameFor(model => model.treatment)</th>
+            <th>@Html.DisplayNameFor(model => model.department.name)</th>
+            <th>@Html.DisplayNameFor(model => model.staff.name)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                <td>@Html.DisplayFor(modelItem => item.name)</td>
+                <td>@Html.DisplayFor(modelItem => item.room_num)</td>
+                <td>@Html.DisplayFor(modelItem => item.treatment)</td>
+                <td>@Html.DisplayFor(modelItem => item.department.name)</td>
+                <td>@Html.DisplayFor(modelItem => item.staff.name)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

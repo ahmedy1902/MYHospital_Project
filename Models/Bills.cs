@@ -12,10 +12,10 @@ namespace CareNet_System.Models
         [Column(TypeName = "nvarchar(50)")]
         public billMethod Payment_Method { get; set; }
 
-        public int insurance_id { get; set; }
+        public int? insurance_id { get; set; }
         [ForeignKey("patient")]
 
-        public int patient_id { get; set; }
+        public int? patient_id { get; set; }
          public Patient? patient { get; set; }
 
     }
