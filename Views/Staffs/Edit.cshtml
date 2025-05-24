@@ -1,24 +1,21 @@
 ﻿@model CareNet_System.Models.Staff
-
 @{
     ViewData["Title"] = "Edit Staff Details";
 }
-
 <h1>Edit Staff Details</h1>
-
 <hr />
 <div class="row">
     <div class="col-md-6">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="personal_photo" />
 
             <div class="form-group">
                 <label asp-for="name" class="control-label"></label>
                 <input asp-for="name" class="form-control" />
                 <span asp-validation-for="name" class="text-danger"></span>
             </div>
-
             <div class="form-group">
                 <label asp-for="title" class="control-label"></label>
                 <select asp-for="title" class="form-control" asp-items="ViewBag.TitleList">
@@ -26,13 +23,11 @@
                 </select>
                 <span asp-validation-for="title" class="text-danger"></span>
             </div>
-
             <div class="form-group">
                 <label asp-for="salary" class="control-label"></label>
                 <input asp-for="salary" class="form-control" type="number" step="0.01" />
                 <span asp-validation-for="salary" class="text-danger"></span>
             </div>
-
             <div class="form-group">
                 <label asp-for="seniority_level" class="control-label"></label>
                 <select asp-for="seniority_level" class="form-control" asp-items="ViewBag.LevelList">
@@ -40,27 +35,39 @@
                 </select>
                 <span asp-validation-for="seniority_level" class="text-danger"></span>
             </div>
-
             <div class="form-group">
                 <label asp-for="experience_years" class="control-label"></label>
                 <input asp-for="experience_years" class="form-control" type="number" />
                 <span asp-validation-for="experience_years" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="personal_photo" class="control-label"></label>
-                <input asp-for="personal_photo" class="form-control" type="text" />
-                <span asp-validation-for="personal_photo" class="text-danger"></span>
-            </div>
+            @if (!string.IsNullOrEmpty(Model.personal_photo))
+            {
+                <div class="form-group">
+                    <label class="control-label">Current Photo</label>
+                    <div class="mb-2">
+                        <img src="@Model.personal_photo" alt="Current Photo" style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px;" />
+                        <label for="newPhoto" class="control-label">Upload New Photo</label>
+                        <input type="file" name="newPhoto" id="newPhoto" class="form-control" accept="image/*" />
+                        <small class="form-text text-muted">Leave empty to keep current photo</small>
+                    </div>
+
+                </div>
+            }
+
+            @* <div class="form-group"> *@
+            @*     <label for="newPhoto" class="control-label">Upload New Photo</label> *@
+            @*     <input type="file" name="newPhoto" id="newPhoto" class="form-control" accept="image/*" /> *@
+            @*     <small class="form-text text-muted">Leave empty to keep current photo</small> *@
+            @* </div> *@
 
             <div class="form-group">
-                <label asp-for="dept_id" class="control-label"></label>
+                <label asp-for="dept_id" class="control-label">Department</label>
                 <select asp-for="dept_id" class="form-control" asp-items="ViewBag.dept_id">
                     <option value="">-- Select Department --</option>
                 </select>
                 <span asp-validation-for="dept_id" class="text-danger"></span>
             </div>
-
             <div class="form-group mt-3">
                 <input type="submit" value="Save" class="btn btn-primary" />
                 <a asp-action="Index" class="btn btn-warning">Back to List</a>
@@ -68,7 +75,6 @@
         </form>
     </div>
 </div>
-
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

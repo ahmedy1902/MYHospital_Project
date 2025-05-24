@@ -1,12 +1,9 @@
 ﻿@model IEnumerable<CareNet_System.Models.Staff>
 @attribute [Authorize]
-
 @{
     ViewData["Title"] = "Index";
 }
-
 <h1>All Staff Members</h1>
-
 <form method="get" asp-action="Index" class="mb-3">
     <div class="row">
         <div class="col-md-4">
@@ -15,25 +12,21 @@
                 <option value="">-- Select Title --</option>
             </select>
         </div>
-
         <div class="col-md-4">
             <label for="departmentFilter">Filter by Department</label>
             <select name="departmentFilter" class="form-control" asp-items="ViewBag.DepartmentList">
                 <option value="">-- Select Department --</option>
             </select>
         </div>
-
         <div class="col-md-4 mt-4">
             <button type="submit" class="btn btn-primary">Filter</button>
             <a asp-action="Index" class="btn btn-secondary">Reset</a>
         </div>
     </div>
 </form>
-
 <p>
     <a asp-action="Create" class="btn btn-primary">Create New</a>
 </p>
-
 <table class="table">
     <thead>
         <tr>
@@ -43,7 +36,7 @@
             <th>@Html.DisplayNameFor(model => model.salary)</th>
             <th>@Html.DisplayNameFor(model => model.seniority_level)</th>
             <th>@Html.DisplayNameFor(model => model.experience_years)</th>
-            <th>@Html.DisplayNameFor(model => model.personal_photo)</th>
+            <th>Photo</th>
             <th>@Html.DisplayNameFor(model => model.department.name)</th>
             <th>Actions</th>
         </tr>
@@ -58,7 +51,16 @@
                 <td>@Html.DisplayFor(modelItem => item.salary)</td>
                 <td>@Html.DisplayFor(modelItem => item.seniority_level)</td>
                 <td>@Html.DisplayFor(modelItem => item.experience_years)</td>
-                <td>@Html.DisplayFor(modelItem => item.personal_photo)</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.personal_photo))
+                    {
+                        <img src="@item.personal_photo" alt="Staff Photo" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" />
+                    }
+                    else
+                    {
+                        <span class="text-muted">No Photo</span>
+                    }
+                </td>
                 <td>@Html.DisplayFor(modelItem => item.department.name)</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a> |
