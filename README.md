@@ -1,1 +1,1 @@
-# My_Hospital_Project
+# Hospital Management System

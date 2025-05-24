@@ -1,0 +1,48 @@
+﻿@model CareNet_System.Models.Department
+@attribute [Authorize]
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit Department</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-group">
+                <label asp-for="name" class="control-label"></label>
+                <input asp-for="name" class="form-control" />
+                <span asp-validation-for="name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="manager" class="control-label"></label>
+                <input asp-for="manager" class="form-control" />
+                <span asp-validation-for="manager" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Patients_num" class="control-label"></label>
+                <input asp-for="Patients_num" class="form-control" />
+                <span asp-validation-for="Patients_num" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="employees_num" class="control-label"></label>
+                <input asp-for="employees_num" class="form-control" />
+                <span asp-validation-for="employees_num" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-warning">Back to List</a>
+
+            </div>
+        </form>
+    </div>
+</div>
+

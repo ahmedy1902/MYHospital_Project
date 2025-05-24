@@ -1,0 +1,66 @@
+﻿@model IEnumerable<CareNet_System.Models.Bills>
+@attribute [Authorize]
+
+@{
+    ViewData["Title"] = "Bills";
+}
+
+<h1>All Bills</h1>
+
+<form method="get" asp-action="Index" class="mb-3">
+    <div class="row">
+        <div class="col-md-4">
+            <label for="paymentFilter">Filter by Payment Method</label>
+            <select name="paymentFilter" class="form-control" asp-items="ViewBag.PaymentMethods">
+                <option value="">-- Select Payment Method --</option>
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label for="patientFilter">Filter by Patient</label>
+            <select name="patientFilter" class="form-control" asp-items="ViewBag.PatientList">
+                <option value="">-- Select Patient --</option>
+            </select>
+        </div>
+
+        <div class="col-md-4 mt-4">
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a asp-action="Index" class="btn btn-secondary">Reset</a>
+        </div>
+    </div>
+</form>
+
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Id)</th>
+            <th>@Html.DisplayNameFor(model => model.total_amount)</th>
+            <th>@Html.DisplayNameFor(model => model.Payment_Method)</th>
+            <th>@Html.DisplayNameFor(model => model.insurance_id)</th>
+            <th>@Html.DisplayNameFor(model => model.patient.name)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                <td>@Html.DisplayFor(modelItem => item.total_amount)</td>
+                <td>@Html.DisplayFor(modelItem => item.Payment_Method)</td>
+                <td>@Html.DisplayFor(modelItem => item.insurance_id)</td>
+                <td>@Html.DisplayFor(modelItem => item.patient.name)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

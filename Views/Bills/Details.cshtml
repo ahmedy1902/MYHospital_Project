@@ -1,0 +1,53 @@
+﻿@model CareNet_System.Models.Bills
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Bill</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.total_amount)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.total_amount)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Payment_Method)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Payment_Method)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.insurance_id)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.insurance_id)
+        </dd>
+
+        <dt class="col-sm-2">
+            Patient Name
+        </dt>
+        <dd class="col-sm-10">
+            @(string.IsNullOrEmpty(Model.patient?.name) ? "No patient assigned" : Model.patient.name)
+        </dd>
+
+        <dt class="col-sm-2">
+            Follow-up Doctor
+        </dt>
+        <dd class="col-sm-10">
+            @(string.IsNullOrEmpty(Model.patient?.followUpDoctor?.name) ? "No doctor assigned" : Model.patient.followUpDoctor.name)
+        </dd>
+    </dl>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-danger">Edit</a> |
+    <a asp-action="Index" class="btn btn-warning">Back to List</a>
+</div>

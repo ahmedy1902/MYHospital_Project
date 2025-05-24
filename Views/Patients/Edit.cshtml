@@ -1,0 +1,64 @@
+﻿@model CareNet_System.Models.Patient
+@attribute [Authorize]
+
+@{
+    ViewData["Title"] = "Edit Patient";
+}
+
+<h1>Edit Patient Details</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-group">
+                <label asp-for="name" class="control-label"></label>
+                <input asp-for="name" class="form-control" />
+                <span asp-validation-for="name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="room_num" class="control-label"></label>
+                <input asp-for="room_num" type="number" class="form-control" />
+                <span asp-validation-for="room_num" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="dept_id" class="control-label">Department</label>
+                <select asp-for="dept_id" class="form-control" asp-items="ViewBag.DepartmentList">
+                    <option value="">-- Select Department --</option>
+                </select>
+                <span asp-validation-for="dept_id" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="followUp_doctorID" class="control-label">Follow-up Doctor</label>
+                <select asp-for="followUp_doctorID" class="form-control" asp-items="ViewBag.StaffList">
+                    <option value="">-- Select Doctor --</option>
+                </select>
+                <span asp-validation-for="followUp_doctorID" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="treatment" class="control-label">Treatment Type</label>
+                <select asp-for="treatment" class="form-control" asp-items="ViewBag.TreatmentList">
+                    <option value="">-- Select Treatment --</option>
+                </select>
+                <span asp-validation-for="treatment" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-3">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-warning ms-2">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
