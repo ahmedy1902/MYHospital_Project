@@ -1,5 +1,4 @@
 ﻿@model CareNet_System.Models.Patient
-
 @{
     ViewData["Title"] = "Delete";
 }
@@ -11,38 +10,56 @@
     <h4>Patient</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.name)
         </dd>
-        <dt class = "col-sm-2">
+
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.room_num)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.room_num)
         </dd>
-        <dt class = "col-sm-2">
+
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.treatment)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.treatment)
         </dd>
-        <dt class = "col-sm-2">
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.status)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.status)
+        </dd>
+
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.department)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.department.Id)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.department.name)
         </dd>
+
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.followUpDoctor)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.followUpDoctor.name)
         </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.AdmissionDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.AdmissionDate)
+        </dd>
     </dl>
-    
+
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |

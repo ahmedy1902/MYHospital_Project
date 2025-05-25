@@ -1,12 +1,10 @@
 ﻿@model CareNet_System.Models.Patient
 @attribute [Authorize]
-
 @{
     ViewData["Title"] = "Edit Patient";
 }
 
 <h1>Edit Patient Details</h1>
-
 <hr />
 <div class="row">
     <div class="col-md-6">
@@ -47,6 +45,20 @@
                     <option value="">-- Select Treatment --</option>
                 </select>
                 <span asp-validation-for="treatment" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="status" class="control-label">Patient Status</label>
+                <select asp-for="status" class="form-control" asp-items="ViewBag.StatusList">
+                    <option value="">-- Select Status --</option>
+                </select>
+                <span asp-validation-for="status" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="AdmissionDate" class="control-label"></label>
+                <input asp-for="AdmissionDate" class="form-control" type="date" />
+                <span asp-validation-for="AdmissionDate" class="text-danger"></span>
             </div>
 
             <div class="form-group mt-3">

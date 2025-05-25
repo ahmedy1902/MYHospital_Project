@@ -1,14 +1,11 @@
 ﻿@model CareNet_System.Models.Patient
 @attribute [Authorize]
-
 @{
     ViewData["Title"] = "Add Patient";
     Layout = "_AddCoursesLayout";
-
 }
 
 <h1>Create New Patient</h1>
-
 <hr />
 <div class="row">
     <div class="col-md-6">
@@ -29,8 +26,18 @@
 
             <div class="form-group">
                 <label asp-for="treatment" class="control-label"></label>
-                <select asp-for="treatment" class="form-control" asp-items="ViewBag.TreatmentList"></select>
+                <select asp-for="treatment" class="form-control" asp-items="ViewBag.TreatmentList">
+                    <option value="">-- Select Treatment --</option>
+                </select>
                 <span asp-validation-for="treatment" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="status" class="control-label"></label>
+                <select asp-for="status" class="form-control" asp-items="ViewBag.StatusList">
+                    <option value="">-- Select Status --</option>
+                </select>
+                <span asp-validation-for="status" class="text-danger"></span>
             </div>
 
             <div class="form-group">
@@ -50,11 +57,15 @@
             </div>
 
             <div class="form-group">
+                <label asp-for="AdmissionDate" class="control-label"></label>
+                <input asp-for="AdmissionDate" class="form-control" type="date" />
+                <span asp-validation-for="AdmissionDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-success" />
                 <a asp-action="Index" class="btn btn-warning">Back to List</a>
-
             </div>
         </form>
     </div>
 </div>
-

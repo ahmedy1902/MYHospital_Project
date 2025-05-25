@@ -6,6 +6,10 @@ namespace CareNet_System.Models
     public enum TreatmentType
     {
         Drug, Surgery, Radiation, Chemotherapy, PhysicalTherapy
+    }  
+    public enum Paientstatus
+    {
+        UnderTreatment , FinishedTreatment  
     }
 
     public class Patient
@@ -30,7 +34,12 @@ namespace CareNet_System.Models
         [Display(Name = "Treatment Type")]
         [Column(TypeName = "nvarchar(50)")]
         [Required(ErrorMessage = "Treatment type is required.")]
-        public TreatmentType? treatment { get; set; }
+        public TreatmentType? treatment { get; set; }  
+
+        [Display(Name = "Patient Status")]
+        [Column(TypeName = "nvarchar(50)")]
+        [Required(ErrorMessage = "Status type is required.")]
+        public Paientstatus? status { get; set; }
 
         [Required(ErrorMessage = "Department is required.")]
         [ForeignKey("department")]
@@ -44,5 +53,8 @@ namespace CareNet_System.Models
         public Staff? followUpDoctor { get; set; }
 
         public List<Bills>? bills { get; set; }
+        [Display(Name = "Date of Admission")]
+        [DataType(DataType.Date)]
+        public DateTime? AdmissionDate { get; set; }
     }
 }

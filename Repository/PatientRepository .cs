@@ -21,13 +21,15 @@ namespace CareNet_System.Repository
                 .Include(p => p.followUpDoctor)
                 .ToList();
         }
+
         public Patient GetById(int id)
         {
             return _context.Patients.Include(p => p.department)
-                                    .Include(p => p.followUpDoctor) 
+                                    .Include(p => p.followUpDoctor)
                                     .Include(p => p.bills)
                                     .FirstOrDefault(p => p.Id == id);
         }
+
         public List<Patient> GetByDepartmentId(int deptId)
         {
             return _context.Patients.Where(p => p.dept_id == deptId).ToList();

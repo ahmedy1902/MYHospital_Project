@@ -21,7 +21,7 @@ namespace CareNet_System.Controllers
         }
 
         // GET: Patients
-        public IActionResult Index(int? roomFilter, int? doctorFilter, TreatmentType? treatmentFilter)
+        public IActionResult Index(int? roomFilter, int? doctorFilter, TreatmentType? treatmentFilter, Paientstatus? statusFilter)
         {
             var patients = _patientRepo.GetAll();
 
@@ -38,6 +38,11 @@ namespace CareNet_System.Controllers
             if (treatmentFilter.HasValue)
             {
                 patients = patients.Where(p => p.treatment == treatmentFilter.Value).ToList();
+            }
+
+            if (statusFilter.HasValue)
+            {
+                patients = patients.Where(p => p.status == statusFilter.Value).ToList();
             }
 
             ViewBag.RoomList = _patientRepo.GetAll()
@@ -57,13 +62,18 @@ namespace CareNet_System.Controllers
                 .Select(t => new SelectListItem { Value = t.ToString(), Text = t.ToString() })
                 .ToList();
 
+            ViewBag.StatusList = Enum.GetValues(typeof(Paientstatus))
+                .Cast<Paientstatus>()
+                .Select(s => new SelectListItem { Value = s.ToString(), Text = s.ToString() })
+                .ToList();
+
             ViewBag.SelectedRoom = roomFilter?.ToString();
             ViewBag.SelectedDoctor = doctorFilter?.ToString();
             ViewBag.SelectedTreatment = treatmentFilter?.ToString();
+            ViewBag.SelectedStatus = statusFilter?.ToString();
 
             return View(patients);
         }
-
 
         // GET: Patients/Details/5
         public IActionResult Details(int id)
@@ -97,6 +107,14 @@ namespace CareNet_System.Controllers
                 "Text"
             );
 
+            ViewBag.StatusList = new SelectList(
+                Enum.GetValues(typeof(Paientstatus))
+                    .Cast<Paientstatus>()
+                    .Select(s => new { Value = s.ToString(), Text = s.ToString() }),
+                "Value",
+                "Text"
+            );
+
             return View();
         }
 
@@ -109,6 +127,22 @@ namespace CareNet_System.Controllers
             {
                 ViewBag.DepartmentList = new SelectList(_deptRepo.GetAll(), "Id", "name", patient.dept_id);
                 ViewBag.StaffList = new SelectList(_staffRepo.GetAll().Where(s => s.title == StaffTitle.Doctor), "Id", "name", patient.followUp_doctorID);
+
+                ViewBag.TreatmentList = new SelectList(
+                    Enum.GetValues(typeof(TreatmentType))
+                        .Cast<TreatmentType>()
+                        .Select(t => new { Value = t.ToString(), Text = t.ToString() }),
+                    "Value",
+                    "Text"
+                );
+
+                ViewBag.StatusList = new SelectList(
+                    Enum.GetValues(typeof(Paientstatus))
+                        .Cast<Paientstatus>()
+                        .Select(s => new { Value = s.ToString(), Text = s.ToString() }),
+                    "Value",
+                    "Text"
+                );
 
                 return View(patient);
             }
@@ -136,9 +170,18 @@ namespace CareNet_System.Controllers
                 })
                 .ToList();
 
+            ViewBag.StatusList = Enum.GetValues(typeof(Paientstatus))
+                .Cast<Paientstatus>()
+                .Select(s => new SelectListItem
+                {
+                    Value = s.ToString(),
+                    Text = s.ToString(),
+                    Selected = (patient.status.HasValue && patient.status.Value == s)
+                })
+                .ToList();
+
             return View(patient);
         }
-
 
         // POST: Patients/Edit/5
         [HttpPost]
@@ -151,6 +194,7 @@ namespace CareNet_System.Controllers
             {
                 ViewBag.DepartmentList = new SelectList(_deptRepo.GetAll(), "Id", "name", patient.dept_id);
                 ViewBag.StaffList = new SelectList(_staffRepo.GetAll().Where(s => s.title == StaffTitle.Doctor), "Id", "name", patient.followUp_doctorID);
+
                 ViewBag.TreatmentList = Enum.GetValues(typeof(TreatmentType))
                     .Cast<TreatmentType>()
                     .Select(t => new SelectListItem
@@ -161,14 +205,22 @@ namespace CareNet_System.Controllers
                     })
                     .ToList();
 
+                ViewBag.StatusList = Enum.GetValues(typeof(Paientstatus))
+                    .Cast<Paientstatus>()
+                    .Select(s => new SelectListItem
+                    {
+                        Value = s.ToString(),
+                        Text = s.ToString(),
+                        Selected = (patient.status.HasValue && patient.status.Value == s)
+                    })
+                    .ToList();
+
                 return View(patient);
             }
 
             _patientRepo.Update(patient);
             return RedirectToAction(nameof(Index));
         }
-
-
 
         // GET: Patients/Delete/5
         public IActionResult Delete(int id)

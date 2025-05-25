@@ -7,17 +7,19 @@
     var roomList = ViewBag.RoomList as List<SelectListItem>;
     var doctorList = ViewBag.DoctorList as List<SelectListItem>;
     var treatmentList = ViewBag.TreatmentList as List<SelectListItem>;
+    var statusList = ViewBag.StatusList as List<SelectListItem>;
 
     string selectedRoom = ViewBag.SelectedRoom as string;
     string selectedDoctor = ViewBag.SelectedDoctor as string;
     string selectedTreatment = ViewBag.SelectedTreatment as string;
+    string selectedStatus = ViewBag.SelectedStatus as string;
 }
 
 <h1>All Patients</h1>
 
 <form asp-action="Index" method="get">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-2">
             <label>Room Number</label>
             <select name="roomFilter" class="form-control">
                 <option value="">-- Select Room --</option>
@@ -38,7 +40,7 @@
             </select>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-2">
             <label>Follow-up Doctor</label>
             <select name="doctorFilter" class="form-control">
                 <option value="">-- Select Doctor --</option>
@@ -59,7 +61,7 @@
             </select>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-2">
             <label>Treatment Type</label>
             <select name="treatmentFilter" class="form-control">
                 <option value="">-- Select Treatment --</option>
@@ -80,7 +82,28 @@
             </select>
         </div>
 
-        <div class="col-md-3 d-flex align-items-end">
+        <div class="col-md-2">
+            <label>Patient Status</label>
+            <select name="statusFilter" class="form-control">
+                <option value="">-- Select Status --</option>
+                @if (statusList != null)
+                {
+                    foreach (var item in statusList)
+                    {
+                        if (item.Value == selectedStatus)
+                        {
+                            <option value="@item.Value" selected>@item.Text</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="col-md-4 d-flex align-items-end">
             <button type="submit" class="btn btn-primary">Filter</button>
             <a asp-action="Index" class="btn btn-secondary ms-2">Clear Filters</a>
         </div>
@@ -97,8 +120,10 @@
             <th>@Html.DisplayNameFor(model => model.name)</th>
             <th>@Html.DisplayNameFor(model => model.room_num)</th>
             <th>@Html.DisplayNameFor(model => model.treatment)</th>
+            <th>@Html.DisplayNameFor(model => model.status)</th>
             <th>@Html.DisplayNameFor(model => model.department)</th>
             <th>@Html.DisplayNameFor(model => model.followUpDoctor)</th>
+            <th>@Html.DisplayNameFor(model => model.AdmissionDate)</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -109,8 +134,10 @@
                 <td>@Html.DisplayFor(modelItem => item.name)</td>
                 <td>@Html.DisplayFor(modelItem => item.room_num)</td>
                 <td>@Html.DisplayFor(modelItem => item.treatment)</td>
+                <td>@Html.DisplayFor(modelItem => item.status)</td>
                 <td>@Html.DisplayFor(modelItem => item.department.name)</td>
                 <td>@Html.DisplayFor(modelItem => item.followUpDoctor.name)</td>
+                <td>@Html.DisplayFor(modelItem => item.AdmissionDate)</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a> |
