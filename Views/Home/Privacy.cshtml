@@ -2,6 +2,7 @@
     ViewData["Title"] = "Privacy Policy";
     Layout = "_MyLayout";
 }
+
 <style>
     body {
         background-image: url('/mine.jpg');
@@ -12,10 +13,10 @@
         background-blend-mode: overlay;
     }
 
-    h1,h2, p {
-        background-color: rgba(128, 128, 128, 0.6); /* لون رمادي مع شفافية */
-        padding: 10px; /* إضافة بعض التباعد الداخلي */
-        border-radius: 5px; /* حواف دائرية لتنسيق أفضل */
+    h1, h2, p ,li{
+        background-color: rgba(128, 128, 128, 0.6); /* Semi-transparent gray */
+        padding: 10px;
+        border-radius: 5px;
     }
 
     h1 {
@@ -25,32 +26,51 @@
 
 <h1>@ViewData["Title"]</h1>
 
+<h2>🛠️ Technologies Used</h2>
 <p>
-    Welcome to **Ahmed's Hospital Management System**. This system is designed to enhance hospital efficiency while ensuring the security and confidentiality of patient data.
-    We are committed to protecting personal information and providing secure healthcare management.
+    This system utilizes the following technologies to ensure efficiency and security:
+    <ul>
+        <li><b>ASP.NET Core</b> – Robust backend framework for scalable applications.</li>
+        <li><b>Entity Framework Core</b> – Efficient ORM for managing database interactions.</li>
+        <li><b>SQL Server</b> – Secure database management for healthcare data.</li>
+        <li><b>ASP.NET Core Identity</b> – User authentication and access control.</li>
+        <li><b>RESTful APIs</b> – Seamless integration with external systems.</li>
+        <li><b>Bootstrap & CSS</b> – Enhanced user interface and styling.</li>
+    </ul>
+</p>
+
+<h2>💡 System Capabilities</h2>
+<p>
+    The hospital management system provides the following key functionalities:
+    <ul>
+        <li>📌 <b>Secure Patient Record Management</b> – Ensures all medical data is safely stored.</li>
+        <li>📌 <b>Doctor Appointment Scheduling</b> – Allows efficient booking and tracking of appointments.</li>
+        <li>📌 <b>Advanced Data Encryption</b> – Protects sensitive patient information.</li>
+        <li>📌 <b>Hospital Resource Management</b> – Streamlines staff and equipment allocation.</li>
+        <li>📌 <b>Role-Based Access Control</b> – Ensures authorized access to data via ASP.NET Core Identity.</li>
+        <li>📌 <b>Detailed Reports & Analytics</b> – Generates medical insights to support decision-making.</li>
+    </ul>
 </p>
 
 <h2>🔒 Data Protection & Security</h2>
 <p>
-    - All patient records are securely stored and **never shared with third parties** without explicit consent.
-    - We use **advanced encryption** and strict authentication mechanisms to ensure data safety.
-    - User access is controlled via **ASP.NET Core Identity**, allowing only authorized personnel to view and manage sensitive information.
+    - All patient records are stored securely and **never shared with third parties** without explicit consent.
+    - We implement **advanced encryption** and strict authentication mechanisms.
+    - User access is controlled via **ASP.NET Core Identity**, ensuring proper authorization.
 </p>
 
 <h2>📜 Information Usage</h2>
 <p>
-    - Patient and hospital data is used **solely for healthcare management purposes**.
-    - The system collects and stores only necessary information to improve medical care and streamline hospital operations.
+    - Patient and hospital data is used **only for healthcare management purposes**.
+    - The system collects necessary data to improve medical care and streamline operations.
     - Users have the right to request **modifications or deletions** of their stored data upon approval.
 </p>
 
 <h2>✅ Compliance & Updates</h2>
 <p>
-    - The system follows **standard healthcare regulations** to ensure compliance with data protection laws.
-    - Regular security updates and audits are performed to maintain system integrity.
-    - Any changes to this privacy policy will be communicated transparently to users.
+    - The system complies with **standard healthcare regulations** to protect data.
+    - Regular **security updates and audits** ensure system integrity.
+    - Any modifications to this policy will be communicated transparently.
 </p>
 
-<p>
-    Thank you for trusting **Ahmed's Hospital Management System**. Your privacy and data security are our top priorities.
-</p>
+<p>Thank you for trusting **Ahmed's Hospital Management System**. Your privacy and data security are our priority.</p>
