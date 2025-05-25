@@ -1,3 +1,43 @@
-﻿@{
-    Layout = "_Layout";
+﻿@* @{ *@
+@*     Layout = "_Layout"; *@
+@* } *@
+@{
+    // Layout = "_Layout";
+    Layout = "_AddCoursesLayout";
+    // Layout = "_MyLayout";
+
 }
+<style>
+    body {
+        background-image: url('/mine.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center 20%;
+        background-color: rgba(255, 255, 255, 0.6);
+        background-blend-mode: overlay;
+    }
+
+    h1 {
+        font-size: 3rem;
+    }
+
+    .table-container {
+        background: rgba(40, 40, 40, 0.9);
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    table {
+        background: transparent;
+        backdrop-filter: blur(10px);
+        border-collapse: collapse;
+        width: 100%;
+        color: #fff;
+    }
+
+    th, td {
+        padding: 10px;
+        border: 1px solid #00d0ff;
+        text-align: left;
+    }
+</style>

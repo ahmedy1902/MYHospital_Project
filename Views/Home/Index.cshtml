@@ -1,9 +1,33 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    Layout = "_MyLayout";
 }
+
+<style>
+    body {
+        background-image: url('/mine.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center 20%;
+        background-color: rgba(255, 255, 255, 0.6);
+        background-blend-mode: overlay;
+    }
+
+    h1, h2, p {
+        background-color: rgba(128, 128, 128, 0.6); /* لون رمادي مع شفافية */
+        padding: 10px; /* إضافة بعض التباعد الداخلي */
+        border-radius: 5px; /* حواف دائرية لتنسيق أفضل */
+    }
+    a {
+        font-size: 1.5rem;
+    }
+</style>
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Welcome to my Hospital manging website</p>
-    <h2>Eng. Ahmed Yasser</h2>
+    <p>Welcome to our Hospital manging website</p>
+    <h2>Eng. Ahmed Yasser </h2>
+    <h2>Eng. Ahmed Mamdouh </h2>
+    <h2> Sandy Youssef </h2>
+    <h2>Toqa Bashir </h2>
 </div>

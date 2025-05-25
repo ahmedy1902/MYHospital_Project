@@ -1,6 +1,27 @@
 ﻿@{
     ViewData["Title"] = "Privacy Policy";
+    Layout = "_MyLayout";
 }
+<style>
+    body {
+        background-image: url('/mine.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center 20%;
+        background-color: rgba(255, 255, 255, 0.6);
+        background-blend-mode: overlay;
+    }
+
+    h1,h2, p {
+        background-color: rgba(128, 128, 128, 0.6); /* لون رمادي مع شفافية */
+        padding: 10px; /* إضافة بعض التباعد الداخلي */
+        border-radius: 5px; /* حواف دائرية لتنسيق أفضل */
+    }
+
+    h1 {
+        font-size: 3rem;
+    }
+</style>
 
 <h1>@ViewData["Title"]</h1>
 
