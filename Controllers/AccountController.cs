@@ -88,7 +88,6 @@ public class AccountController : Controller
         return RedirectToAction("Index", "Home");
     }
 
-    // ✅ Manage Roles (اختياري)
     public async Task<IActionResult> CreateRole(string roleName)
     {
         if (!await _roleManager.RoleExistsAsync(roleName))
