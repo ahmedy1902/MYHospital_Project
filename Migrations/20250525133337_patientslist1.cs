@@ -31,7 +31,7 @@ namespace CareNet_System.Migrations
             migrationBuilder.DropColumn(
                 name: "AdmissionDate",
                 table: "Patients");
-
+           
             migrationBuilder.DropColumn(
                 name: "status",
                 table: "Patients");
