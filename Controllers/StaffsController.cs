@@ -17,13 +17,15 @@ namespace CareNet_System.Controllers
     {
         private readonly IRepository<Staff> _staffRepository;
         private readonly IDepartmentRepository _departmentRepository;
+        private readonly IPatientRepository _patientsRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public StaffsController(IRepository<Staff> staffRepository, IDepartmentRepository departmentRepository, IWebHostEnvironment webHostEnvironment)
+        public StaffsController(IRepository<Staff> staffRepository, IPatientRepository PatientRepository, IDepartmentRepository departmentRepository, IWebHostEnvironment webHostEnvironment)
         {
             _staffRepository = staffRepository;
             _departmentRepository = departmentRepository;
             _webHostEnvironment = webHostEnvironment;
+            _patientsRepository = PatientRepository;
         }
 
         public IActionResult Index(string titleFilter, int? departmentFilter)
@@ -58,19 +60,27 @@ namespace CareNet_System.Controllers
 
             return View(staffList);
         }
-
         public IActionResult Details(int? id)
         {
             if (id == null) return NotFound();
 
-            var staff = _staffRepository.GetAll().FirstOrDefault(s => s.Id == id);
+            var staff = _staffRepository.GetAll()
+                .FirstOrDefault(s => s.Id == id);
+
             if (staff == null) return NotFound();
 
             staff.department = _departmentRepository.GetById(staff.dept_id);
 
+            // Fetch patients only if the staff member is a doctor
+            if (staff.title == StaffTitle.Doctor)
+            {
+                staff.patients = _patientsRepository.GetAll()
+                    .Where(p => p.followUp_doctorID == staff.Id)
+                    .ToList();
+            }
+
             return View(staff);
         }
-
         public IActionResult Create()
         {
             PrepareViewBags();

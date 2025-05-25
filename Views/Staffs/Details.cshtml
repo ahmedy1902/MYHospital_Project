@@ -1,64 +1,84 @@
 ﻿@model CareNet_System.Models.Staff
 @attribute [Authorize]
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Staff Details";
 }
-<h1>Details</h1>
+
+<h1>Staff Details</h1>
+
 <div>
-    <h4>Staff</h4>
+    <h4>General Information</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.title)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.title)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.salary)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.salary)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.seniority_level)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.seniority_level)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.experience_years)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.experience_years)
-        </dd>
-        <dt class="col-sm-2">
-            Personal Photo
-        </dt>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.name)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.name)</dd>
+
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.title)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.title)</dd>
+
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.salary)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.salary)</dd>
+
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.seniority_level)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.seniority_level)</dd>
+
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.experience_years)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.experience_years)</dd>
+
+        <dt class="col-sm-2">Personal Photo</dt>
         <dd class="col-sm-10">
             @if (!string.IsNullOrEmpty(Model.personal_photo))
             {
-                <img src="@Model.personal_photo" alt="Staff Photo" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;" />
+                <img src="@Model.personal_photo" alt="Staff Photo"
+                     style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;" />
             }
             else
             {
                 <span class="text-muted">No Photo Available</span>
             }
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.department)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.department.name)
-        </dd>
+
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.department)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.department.name)</dd>
     </dl>
 </div>
+
+@if (Model.title == StaffTitle.Doctor && Model.patients != null && Model.patients.Any())
+{
+    <h4>patients Under Treatment</h4>
+    <hr />
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Room Number</th>
+                <th>Treatment Type</th>
+                <th>Department</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var patient in Model.patients)
+            {
+                <tr>
+                    <td>@patient.name</td>
+                    <td>@patient.room_num</td>
+                    <td>@patient.treatment</td>
+                    <td>@patient.department?.name</td>
+                    <td>
+                        <a asp-controller="patients" asp-action="Details" asp-route-id="@patient.Id"
+                           class="btn btn-sm btn-info">View Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="text-muted">No patients assigned.</p>
+}
+
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-info">Edit</a> |
     <a asp-action="Index" class="btn btn-warning">Back to List</a>

@@ -43,6 +43,6 @@ namespace CareNet_System.Models
         public int dept_id { get; set; }
 
         public Department? department { get; set; }
-        public Patient? patients { get; set; }
+        public List<Patient>? patients { get; set; }
     }
 }
